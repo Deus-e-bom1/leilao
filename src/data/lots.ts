@@ -1575,5 +1575,60 @@ export const lots: Lot[] = [
 
 export const getLot = (slug: string) => lots.find((l) => l.slug === slug);
 
+// Valores promocionais liberados pelo popup de saída ("Clique aqui para adquirir")
+export const PROMO_PRICES: Record<string, number> = {
+  "samsung-galaxy-s25-ultra-512gb": 26,
+  "iphone-15-pro-max-256gb-titanio-preto": 39,
+  "geladeira-french-door-brastemp-554l": 44.5,
+  "iphone-16-pro-max-256gb-titanio-preto": 42.5,
+  "iphone-17-pro-max-256gb-laranja-cosmico": 44.5,
+  "console-playstation-5-slim-com-2-controles": 44,
+  "ar-condicionado-split-lg-24000-btu": 40,
+  "drone-dji-mini-com-kit-combo": 21,
+  "guarda-roupa-8-portas-com-espelho": 27,
+  "geladeira-brastemp-frost-free-2-portas": 26.72,
+  "apple-airpods-max": 21.61,
+  "filtro-de-agua-electrolux-painel-touch": 26.66,
+  "fogao-5-bocas-electrolux-preto": 38,
+  "fritadeira-eletrica-mondial-12l": 34,
+  "cafeteira-dolce-gusto-arno": 36.2,
+  "iphone-15-128gb-azul": 22.5,
+  "iphone-15-128gb-rosa": 26,
+  "iphone-16-128gb-preto": 30.5,
+  "parafusadeira-furadeira-impacto-dewalt-dcd7781d2-20v": 21,
+  "caixa-de-som-jbl-boombox-3": 29,
+  "caixa-de-som-jbl-boombox-4": 33.5,
+  "caixa-de-som-jbl-partybox-stage-320": 39.5,
+  "fone-de-ouvido-jbl-tour-one-bluetooth": 24.5,
+  "jogo-de-panelas-brinox-ceramic-life-10-pecas": 23,
+  "kit-3-panelas-de-pressao": 22,
+  "camera-de-seguranca-wifi-360-com-visao-noturna": 27.5,
+  "kit-cozinha-completo-cadence-7-em-1": 36,
+  "xiaomi-poco-x5-5g": 26.5,
+  "smart-tv-samsung-43-4k-crystal-uhd": 40.5,
+};
+
+export function applyPromoPrices() {
+  for (const lot of lots) {
+    const promo = PROMO_PRICES[lot.slug];
+    if (promo === undefined) continue;
+    lot.currentBid = promo;
+    lot.nextBid = promo;
+    if (lot.bidHistory?.length) {
+      lot.bidHistory[0] = { ...lot.bidHistory[0]!, value: promo };
+    }
+  }
+}
+
+// Aplica automaticamente quando a promoção já foi liberada neste navegador
+try {
+  if (
+    typeof window !== "undefined" &&
+    window.localStorage.getItem("exit-promo-active") === "1"
+  ) {
+    applyPromoPrices();
+  }
+} catch {}
+
 export const brl = (value: number) =>
   value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });

